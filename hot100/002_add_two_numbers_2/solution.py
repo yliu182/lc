@@ -34,55 +34,89 @@ class ListNode:
 class Solution:
 
     def addTwoNumbers(
-        self,
-        l1: Optional[ListNode],
-        l2: Optional[ListNode],
-    ) -> Optional[ListNode]
-        if l1 is None:
-            return l2
-        if l2 is None:
-            return l1
+            self,
+            l1: Optional[ListNode],
+            l2: Optional[ListNode],
+        ) -> Optional[ListNode]:
+            if l1 is None:
+                return l2
+            if l2 is None:
+                return l1
 
-        fake_head = ListNode()
-        result_itr = fake_head
-        ptr1 = l1
-        ptr2 = l2
-        carry = 0
+            fake_head = ListNode()
+            result_itr = fake_head
+            ptr1 = l1
+            ptr2 = l2
+            carry = 0
 
-        while ptr1 is not None and ptr2 is not None:
-            total = ptr1.val + ptr2.val + carry
-            carry = (int)(total / 10)
-            result_itr->next = ListNode(
-                total % 10,
-            )
-            result_itr = result_itr.next
-            ptr1 = ptr1.next
-            ptr2 = ptr2.next
-
-        if ptr1 is not None:
-            while ptr1 is not None:
-                total = ptr1.val + carry
-                carry = (int)(total / 10)
-                result_itr->next = ListNode(
+            while ptr1 is not None or ptr2 is not None:
+                p1_val = ptr1.val if ptr1 else 0
+                p2_val = ptr2.val if ptr2 else 0
+                total = p1_val + p2_val + carry
+                carry = total // 10
+                result_itr.next = ListNode(
                     total % 10,
                 )
                 result_itr = result_itr.next
-                ptr1 = ptr1.next
-        else:
-            while ptr2 is not None:
-                total = ptr2.val + carry
-                carry = (int)(total / 10)
-                result_itr->next = ListNode(
-                    total % 10,
-                )
-                result_itr = result_itr.next
-                ptr2 = ptr2.next
+                ptr1 = ptr1.next if ptr1 else None
+                ptr2 = ptr2.next if ptr2 else None
+
+            if carry > 0:
+                result_itr.next = ListNode(carry)
+
+            return fake_head.next
+
+    # Version 2
+    # def addTwoNumbers(
+    #     self,
+    #     l1: Optional[ListNode],
+    #     l2: Optional[ListNode],
+    # ) -> Optional[ListNode]:
+    #     if l1 is None:
+    #         return l2
+    #     if l2 is None:
+    #         return l1
+
+    #     fake_head = ListNode()
+    #     result_itr = fake_head
+    #     ptr1 = l1
+    #     ptr2 = l2
+    #     carry = 0
+
+    #     while ptr1 is not None and ptr2 is not None:
+    #         total = ptr1.val + ptr2.val + carry
+    #         carry = total // 10
+    #         result_itr.next = ListNode(
+    #             total % 10,
+    #         )
+    #         result_itr = result_itr.next
+    #         ptr1 = ptr1.next
+    #         ptr2 = ptr2.next
+
+    #     if ptr1 is not None:
+    #         while ptr1 is not None:
+    #             total = ptr1.val + carry
+    #             carry = (int)(total / 10)
+    #             result_itr.next = ListNode(
+    #                 total % 10,
+    #             )
+    #             result_itr = result_itr.next
+    #             ptr1 = ptr1.next
+    #     else:
+    #         while ptr2 is not None:
+    #             total = ptr2.val + carry
+    #             carry = (int)(total / 10)
+    #             result_itr.next = ListNode(
+    #                 total % 10,
+    #             )
+    #             result_itr = result_itr.next
+    #             ptr2 = ptr2.next
 
 
-        if carry > 0:
-            result_itr.next = ListNode(carry)
+    #     if carry > 0:
+    #         result_itr.next = ListNode(carry)
 
-        return fake_head.next
+    #     return fake_head.next
 
 
 
