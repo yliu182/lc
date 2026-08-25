@@ -23,25 +23,39 @@ Example 3:
 
 class Solution:
 
-    # solution version 2
+    # solution version 3
     def lengthOfLongestSubstring(self, s: str) -> int:
-        if len(s) <= 1:
-            return len(s)
-
         left = 0
         right = 0
-        chars = []
+        last_seen = {}
         max_result = 0
 
         while right < len(s):
-            while s[right] in chars:
-                chars.pop(0)
-                left += 1
-            chars.append(s[right])
+            c = s[right]
+            if c in last_seen:
+                left = last_seen[c] + 1
+            last_seen[c] = right
             right += 1
-            max_result = max(max_result, len(chars))
+            max_result = max(max_result, right - left)
 
         return max_result
+
+    # # solution version 2
+    # def lengthOfLongestSubstring(self, s: str) -> int:
+    #     left = 0
+    #     right = 0
+    #     chars = []
+    #     max_result = 0
+
+    #     while right < len(s):
+    #         while s[right] in chars:
+    #             chars.pop(0)
+    #             left += 1
+    #         chars.append(s[right])
+    #         right += 1
+    #         max_result = max(max_result, len(chars))
+
+    #     return max_result
 
 
 
