@@ -22,28 +22,51 @@ Example 3:
 
 
 class Solution:
+
+    # solution version 2
     def lengthOfLongestSubstring(self, s: str) -> int:
         if len(s) <= 1:
             return len(s)
 
         left = 0
-        right = 1
-        dedup_set = {s[0]}
-        max_result = 1
+        right = 0
+        chars = []
+        max_result = 0
+
         while right < len(s):
-            if s[right] not in dedup_set:
-                dedup_set.add(s[right])
-                right += 1
-                max_result = max(max_result, len(dedup_set))
-            else:
-                first_ocur_idx = s[left:right].find(s[right])
-                for i in range(first_ocur_idx + 1 - left):
-                    dedup_set.remove(s[i + left])
-                left = first_ocur_idx + 1
-                dedup_set.add(s[right])
-                right += 1
+            while s[right] in chars:
+                chars.pop(0)
+                left += 1
+            chars.append(s[right])
+            right += 1
+            max_result = max(max_result, len(chars))
 
         return max_result
+
+
+
+    # def lengthOfLongestSubstring(self, s: str) -> int:
+    #     if len(s) <= 1:
+    #         return len(s)
+
+    #     left = 0
+    #     right = 1
+    #     dedup_set = {s[0]}
+    #     max_result = 1
+    #     while right < len(s):
+    #         if s[right] not in dedup_set:
+    #             dedup_set.add(s[right])
+    #             right += 1
+    #             max_result = max(max_result, len(dedup_set))
+    #         else:
+    #             first_ocur_idx = s[left:right].find(s[right])
+    #             for i in range(first_ocur_idx + 1 - left):
+    #                 dedup_set.remove(s[i + left])
+    #             left = first_ocur_idx + 1
+    #             dedup_set.add(s[right])
+    #             right += 1
+
+    #     return max_result
 
 
 
