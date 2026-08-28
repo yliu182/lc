@@ -24,4 +24,28 @@ from typing import List
 
 class Solution:
     def threeSum(self, nums: List[int]) -> List[List[int]]:
-        pass
+        if len(nums) < 3:
+            return []
+
+        nums.sort()
+        num_cnts = {}
+
+        i = 0
+
+        results = []
+        while i < len(nums) - 2:
+            l = i + 1
+            r = len(nums) - 1
+
+            while l < r:
+                if nums[l] + nums[r] + nums[i] < 0:
+                    l += 1
+                elif nums[l] + nums[r] + nums[i] < 0:
+                    r -= 1
+                else:
+                    results.append([nums[l], nums[r], nums[i]])
+
+            m = -l - r
+            if m in num_cnts:
+                results.append([nums[l], nums[m], nums[r]])
+            elif
