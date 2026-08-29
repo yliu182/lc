@@ -48,4 +48,5 @@ class Solution:
             m = -l - r
             if m in num_cnts:
                 results.append([nums[l], nums[m], nums[r]])
-            elif
+
+        return results
