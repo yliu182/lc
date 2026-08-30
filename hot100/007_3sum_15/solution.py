@@ -24,29 +24,56 @@ from typing import List
 
 class Solution:
     def threeSum(self, nums: List[int]) -> List[List[int]]:
-        if len(nums) < 3:
-            return []
-
         nums.sort()
-        num_cnts = {}
-
-        i = 0
-
         results = []
-        while i < len(nums) - 2:
+        for i in range(len(nums) - 2):
+            if i > 0 and nums[i] == nums[i-1]:
+                continue
+
             l = i + 1
             r = len(nums) - 1
 
             while l < r:
-                if nums[l] + nums[r] + nums[i] < 0:
+                cur_sum = nums[l] + nums[r] + nums[i]
+                if cur_sum < 0:
                     l += 1
-                elif nums[l] + nums[r] + nums[i] < 0:
+                elif cur_sum > 0:
                     r -= 1
                 else:
-                    results.append([nums[l], nums[r], nums[i]])
-
-            m = -l - r
-            if m in num_cnts:
-                results.append([nums[l], nums[m], nums[r]])
+                    results.append([nums[i], nums[l], nums[r]])
+                    l += 1
+                    r -= 1
+                    while l < r and nums[l] == nums[l-1]:
+                        l += 1
+                    while l < r and nums[r] == nums[r+1]:
+                        r -= 1
 
         return results
+
+"""
+Example 1:
+    Input: nums = [-1,0,1,2,-1,-4]
+
+                  [-4, -1, -1, 0, 1, 2]
+
+                           i
+                   0                 5
+
+    cur_sum = 0
+
+    [-1, -1, 2]
+
+    Output: [[-1,-1,2],[-1,0,1]]
+
+Example 2:
+    Input: nums = [0,1,1]
+    Output: []
+
+Example 3:
+    Input: nums = [0,0,0]
+    Output: [[0,0,0]]
+
+cur_sum = 0
+l = 2
+r = 1
+"""
