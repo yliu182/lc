@@ -30,4 +30,34 @@ class ListNode:
 
 class Solution:
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
-        pass
+        dummy = ListNode()
+
+        def mergeTwo(l1, l2):
+            dummy = ListNode()
+            p = dummy
+            p1 = l1
+            p2 = l2
+            while p1 is not None and p2 is not None:
+                if p1.val <= p2.val:
+                    p.next = p1
+                    p1 = p1.next
+                else:
+                    p.next = p2
+                    p2 = p2.next
+                p = p.next
+
+            p.next = p1 if p1 is not None else p2
+            return dummy.next
+
+        while len(lists) > 1:
+            new_lists = []
+            for i in range(0, len(lists), 2):
+                p1 = lists[i]
+                p2 = lists[i+1] if i+1 < len(lists) else None
+                new_lists.append(mergeTwo(p1, p2))
+            lists = new_lists
+
+        if len(lists) == 1:
+            return lists[0]
+        else:
+            return None
