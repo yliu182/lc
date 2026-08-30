@@ -18,4 +18,17 @@ from typing import List
 
 class Solution:
     def generateParenthesis(self, n: int) -> List[str]:
-        pass
+        final_results = []
+        def back(path, left, right):
+            if left == n and right == n:
+                final_results.append(path)
+                return
+
+            if left < n:
+                back(path+'(', left+1, right)
+
+            if left > right:
+                back(path+')', left, right+1)
+
+        back("", 0, 0)
+        return final_results
