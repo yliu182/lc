@@ -24,5 +24,31 @@ Example 3:
 
 
 class Solution:
+    """
+这类题不能只看“每种括号数量是否相等”，而要看：
+
+最近打开的括号，必须最先关闭。
+
+这正好是 stack / 栈 的性质：Last In, First Out。
+    """
+
     def isValid(self, s: str) -> bool:
-        pass
+        mapping = {
+            ")": "(",
+            "}": "{",
+            "]": "[",
+        }
+        stack = []
+        for c in s:
+            if c in mapping:
+                rc = mapping[c]
+                if not stack:
+                    return False
+
+                if stack[-1] != rc:
+                    return False
+                stack.pop()
+            else:
+                stack.append(c)
+
+        return len(stack) == 0
