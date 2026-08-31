@@ -30,5 +30,61 @@ class ListNode:
 
 
 class Solution:
+
+    """
+    反转前：
+
+g_prev -> 1 -> 2 -> 3 -> g_next
+          ↑         ↑
+       g_start     kth
+
+
+反转后：
+
+g_prev -> 3 -> 2 -> 1 -> g_next
+                    ↑
+                  g_prev（下一轮）
+
+    """
     def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
-        pass
+        dummy = ListNode(0, head)
+        g_prev = dummy
+
+        def getK(cur, k):
+            while k > 0 and cur is not None:
+                cur = cur.next
+                k -= 1
+            return cur
+
+        while True:
+            kth = getK(g_prev, k)
+            if kth is None:
+                break
+
+            g_next = kth.next
+            g_start = g_prev.next
+
+            prev = g_next
+            cur = g_start
+            while cur != g_next:
+                nxt = cur.next
+                cur.next = prev
+                prev = cur
+                cur = nxt
+
+            g_prev.next = kth
+            g_prev = g_start
+        return dummy.next
+
+
+
+
+        # def reverse(ListNode head):
+        #     prev = None
+        #     cur = head
+        #     while cur is not None:
+        #         nxt = cur.next
+        #         cur.next = prev
+        #         cur = nxt
+        #         prev = cur
+        #     return prev
