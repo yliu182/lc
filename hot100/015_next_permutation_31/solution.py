@@ -33,4 +33,23 @@ class Solution:
         """
         Do not return anything, modify nums in-place instead.
         """
-        pass
+        for i in range(len(nums)):
+            p = len(nums) - 1 - i
+            q = p+1
+            # find the mininum element that is bigger than nums[p]
+            # in the range of [q, q+1, ..., len(nums)-1]
+            min_val = float('inf')
+            min_idx = None
+            while q < len(nums):
+                if nums[q] > nums[p] and nums[q] < min_val:
+                    min_val = min(min_val, nums[q])
+                    min_idx = q
+                q += 1
+
+            if min_idx is not None:
+                # swap nums[p] and nums[min_idx] in place
+                nums[min_idx] = nums[p]
+                nums[p] = min_val
+                return
+
+        return nums.sort()
