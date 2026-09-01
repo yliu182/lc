@@ -22,4 +22,21 @@ Example 3:
 
 class Solution:
     def longestValidParentheses(self, s: str) -> int:
-        pass
+        final_result = 0
+        for i in range(len(s)):
+            if s[i] == ')':
+                continue
+            left = 1
+            right = 0
+            j = i + 1
+            for j in range(i+1, len(s), 1):
+                if s[j] == '(':
+                    left += 1
+                else:
+                    right += 1
+                if left < right:
+                    break
+                if left == right:
+                    final_result = max(final_result, j - i + 1)
+
+        return final_result
