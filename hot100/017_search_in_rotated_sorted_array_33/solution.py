@@ -30,4 +30,33 @@ from typing import List
 
 class Solution:
     def search(self, nums: List[int], target: int) -> int:
-        pass
+        if len(nums) == 0:
+            return -1
+        elif len(nums) == 1:
+            return 0 if nums[0] == target else -1
+
+        l = 0
+        r = len(nums) - 1
+        while l < r:
+            mid = (l + r) // 2
+            if nums[mid] == target:
+                return mid
+            if nums[l] == target:
+                return l
+            if nums[r] == target:
+                return r
+
+            # check which side is sorted, and if "target" is in the sorted half
+            if nums[l] < nums[mid]:
+                if target > nums[l] and target < nums[mid]:
+                    r = mid - 1
+                else:
+                    l = mid + 1
+            else:
+                # right side is sorted (ascending)
+                if target > nums[mid] and target < nums[r]:
+                    l = mid + 1
+                else:
+                    r = mid - 1
+
+        return -1
