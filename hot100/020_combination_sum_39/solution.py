@@ -25,6 +25,38 @@ Example 3:
 from typing import List
 
 
+"""
+BFS type solution
+
+bt(
+    path, # [2, 2, 2]
+    target, #2
+    solution, # [[]]
+)
+
+how to dedup ?
+(1) first construct solution, and then dedup
+(2) dedup while construct "solution"
+
+"""
+
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        pass
+        final_solution = [] # list of tuple
+        def bt(candidates, path, target, solution):
+            if target < 0:
+                return
+            if target == 0:
+                path.sort()
+                t = tuple(path)
+                if t not in solution:
+                    solution.append(t)
+                return
+
+            for c in candidates:
+                if c <= target:
+                    bt(candidates, path + [c], target - c, solution)
+
+        bt(candidates, [], target, final_solution)
+
+        return [list(t) for t in final_solution]
