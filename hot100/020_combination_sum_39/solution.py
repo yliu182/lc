@@ -26,9 +26,9 @@ from typing import List
 
 
 """
-BFS type solution
+DFS type solution
 
-bt(
+dfs(
     path, # [2, 2, 2]
     target, #2
     solution, # [[]]
@@ -41,22 +41,38 @@ how to dedup ?
 """
 
 class Solution:
+    # def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+    #     final_solution = [] # list of tuple
+    #     def dfs(candidates, path, target, solution):
+    #         if target < 0:
+    #             return
+    #         if target == 0:
+    #             path.sort()
+    #             t = tuple(path)
+    #             if t not in solution:
+    #                 solution.append(t)
+    #             return
+
+    #         for c in candidates:
+    #             if c <= target:
+    #                 bt(candidates, path + [c], target - c, solution)
+
+    #     dfs(candidates, [], target, final_solution)
+
+    #     return [list(t) for t in final_solution]
+
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         final_solution = [] # list of tuple
-        def bt(candidates, path, target, solution):
-            if target < 0:
+        def dfs(path, start_idx, remaining):
+            if remaining < 0:
                 return
-            if target == 0:
-                path.sort()
-                t = tuple(path)
-                if t not in solution:
-                    solution.append(t)
+            if remaining == 0:
+                final_solution.append(path)
                 return
 
-            for c in candidates:
-                if c <= target:
-                    bt(candidates, path + [c], target - c, solution)
+            for new_idx in range(start_idx, len(candidates), 1):
+                a = candidates[new_idx]
+                dfs(path + [a], new_idx, remaining - a)
 
-        bt(candidates, [], target, final_solution)
-
-        return [list(t) for t in final_solution]
+        dfs([], 0, target)
+        return final_solution
