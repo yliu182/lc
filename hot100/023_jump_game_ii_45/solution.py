@@ -29,4 +29,15 @@ from typing import List
 
 class Solution:
     def jump(self, nums: List[int]) -> int:
-        pass
+        if len(nums) <= 1:
+            return 0
+
+        result = 0
+        max_sum = 0
+        for i in range(len(nums)):
+            max_sum += nums[i]
+            result += 1
+            if max_sum >= nums[len(nums) - 1]:
+                return result
+
+        return result
