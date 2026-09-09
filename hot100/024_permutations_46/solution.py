@@ -26,5 +26,43 @@ from typing import List
 
 
 class Solution:
+
+    ## More expensive solution
+    # def permute(self, nums: List[int]) -> List[List[int]]:
+
+    #     final_results = []
+    #     def dfs(
+    #         path, # List[int]
+    #     ):
+    #         if len(path) == len(nums):
+    #             final_results.append(path)
+    #             return
+
+    #         used = set(path)
+    #         for n in nums:
+    #             if n not in used:
+    #                 dfs(path + [n])
+
+    #     dfs([])
+    #     return final_results
+
     def permute(self, nums: List[int]) -> List[List[int]]:
-        pass
+        final_results = []
+        used = set()
+        path = []
+
+        def dfs():
+            if len(path) == len(nums):
+                final_results.append(path.copy())
+                return
+
+            for n in nums:
+                if n not in used:
+                    path.append(n)
+                    used.add(n)
+                    dfs()
+                    path.pop()
+                    used.remove(n)
+
+        dfs()
+        return final_results
