@@ -24,7 +24,17 @@ Constraints:
 
 from typing import List
 
+"""
+如果之前累积的 sum 对当前数字有帮助，就继续；如果之前的 sum 已经是负担，就从当前数字重新开始。
+"""
 
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
-        pass
+        final_result = float('-inf')
+        cur_max = float('-inf')
+
+        for n in nums:
+            cur_max = max(cur_max + n, n)
+            final_result = max(final_result, cur_max)
+
+        return final_result
