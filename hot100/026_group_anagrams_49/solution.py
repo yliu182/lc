@@ -36,25 +36,45 @@ Space: O(n * k)
 """
 
 class Solution:
+    # def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+    #     mapping = {}
+    #     for s in strs:
+    #         key = "".join(sorted(s))
+    #         """
+    #         Python 的 string 本身就可以直接遍历：
+    #         sorted("eat") -> ['a', 'e', 't']
+
+    #         sort() 和 sorted() 不一样
+    #         x = ['e', 'a', 't']
+    #         x.sort() will change x inplace
+    #         sorted(x) will create a new list
+    #         """
+    #         if key not in mapping:
+    #             mapping[key] = [s]
+    #         else:
+    #             mapping[key].append(s)
+
+    #     final_return = []
+    #     for v in mapping.values():
+    #         final_return.append(v)
+    #     return final_return
+
+
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         mapping = {}
-        for s in strs:
-            key = "".join(sorted(s))
-            """
-            Python 的 string 本身就可以直接遍历：
-            sorted("eat") -> ['a', 'e', 't']
-
-            sort() 和 sorted() 不一样
-            x = ['e', 'a', 't']
-            x.sort() will change x inplace
-            sorted(x) will create a new list
-            """
-            if key not in mapping:
-                mapping[key] = [s]
-            else:
-                mapping[key].append(s)
-
         final_return = []
+        # given strs[i] consists of lowercase English letters.
+        for string in strs:
+            count = [0] * 26
+            for c in string:
+                i = ord(c) - ord('a')
+                count[i] += 1
+            key = tuple(count)
+            if key in mapping:
+                mapping[key].append(string)
+            else:
+                mapping[key] = [string]
+
         for v in mapping.values():
             final_return.append(v)
         return final_return
