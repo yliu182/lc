@@ -60,15 +60,16 @@ class Solution:
         solutions = []
 
 
-        used_cols = []
-        used_diag1 = []
-        used_diag2 = []
+        used_cols = set()
+        used_diag1 = set()
+        used_diag2 = set()
+        path = []
 
         def dfs(
             row_idx, # int, current index of row to process
         ):
             if row_idx == n:
-                solutions.append(used_cols.copy())
+                solutions.append(path.copy())
                 return
 
             for col_idx in range(n):
@@ -81,15 +82,17 @@ class Solution:
                 if row_idx + col_idx in used_diag2:
                     continue
 
-                used_cols.append(col_idx)
-                used_diag1.append(row_idx - col_idx)
-                used_diag2.append(row_idx + col_idx)
+                used_cols.add(col_idx)
+                used_diag1.add(row_idx - col_idx)
+                used_diag2.add(row_idx + col_idx)
+                path.append(col_idx)
 
                 dfs(row_idx+1)
 
-                used_cols.pop()
-                used_diag1.pop()
-                used_diag2.pop()
+                used_cols.remove(col_idx)
+                used_diag1.remove(row_idx - col_idx)
+                used_diag2.remove(row_idx + col_idx)
+                path.pop()
 
         dfs(0)
 
