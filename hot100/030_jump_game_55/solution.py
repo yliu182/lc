@@ -23,6 +23,20 @@ Constraints:
 from typing import List
 
 
+"""
+可以把这个 greedy 思路理解成：
+
+我不关心具体怎么跳，我只关心“目前所有可能路径里，最远能覆盖到哪里”。
+
+这就是为什么它比 BFS 更简单。BFS 会显式探索很多路径，而 greedy 把所有这些路径压缩成了一个信息
+"""
 class Solution:
     def canJump(self, nums: List[int]) -> bool:
-        pass
+        max_reach = 0
+        for i in range(len(nums)):
+            # 我之前所有能到达的位置，最远也只能到 max_reach，连当前位置 i 都碰不到。
+            if max_reach < i:
+                return False
+            max_reach = max(max_reach, i + nums[i])
+
+        return True
