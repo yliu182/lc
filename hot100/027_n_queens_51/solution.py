@@ -24,7 +24,82 @@ Constraints:
 
 from typing import List
 
+"""
+Similar to permutation kind of problem, consider using DFS (backtrack kind of solution)
+
+def dfs(row):
+    if row == n:
+        # 找到一个完整 solution
+        return
+
+    for col in range(n):
+        if 冲突:
+            continue
+
+        # choose
+        放 Queen
+        加入 cols / diag
+
+        dfs(row + 1)
+
+        # undo
+        移除 Queen
+        从 cols / diag 删除
+
+DFS 并不是暴力生成所有棋盘。它每放一个 Queen，就立刻用这三个条件剪枝：
+    col in cols
+    row - col in diag1
+    row + col in diag2
+
+cols , diag1, diag2 就是三个我们需要维护的 list
+"""
 
 class Solution:
     def solveNQueens(self, n: int) -> List[List[str]]:
-        pass
+        # [[3, 1, 2, 0], [0, 2, 3, 1]]
+        solutions = []
+
+
+        used_cols = []
+        used_diag1 = []
+        used_diag2 = []
+
+        def dfs(
+            row_idx, # int, current index of row to process
+        ):
+            if row_idx == n:
+                solutions.append(used_cols.copy())
+                return
+
+            for col_idx in range(n):
+                if col_idx in used_cols:
+                    continue
+
+                if row_idx - col_idx in used_diag1:
+                    continue
+
+                if row_idx + col_idx in used_diag2:
+                    continue
+
+                used_cols.append(col_idx)
+                used_diag1.append(row_idx - col_idx)
+                used_diag2.append(row_idx + col_idx)
+
+                dfs(row_idx+1)
+
+                used_cols.pop()
+                used_diag1.pop()
+                used_diag2.pop()
+
+        dfs(0)
+
+        final_results = []
+        for i, col_ids in enumerate(solutions):
+            result = []
+            for col_id in col_ids:
+                s = ['.'] * n
+                s[col_id] = 'Q'
+                result.append(''.join(s))
+            final_results.append(result)
+
+        return final_results
