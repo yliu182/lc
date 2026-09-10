@@ -22,6 +22,34 @@ Constraints:
 from typing import List
 
 
+"""
+先排序，再贪心合并。
+
+先按照每个 interval 的 start 从小到大排序。这样之后，你只需要看“当前区间”和“结果里最后一个区间”是否重叠。
+"""
+
 class Solution:
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
-        pass
+        if len(intervals) == 0:
+            return []
+
+        intervals.sort(key=lambda x:x[0])
+
+        results = [intervals[0]]
+        last_start, last_end= intervals[0][0], intervals[0][1]
+        for i in range(1, len(intervals), 1):
+            interval = intervals[i]
+            if interval[0] > last_end:
+                results.append(interval)
+                last_start, last_end = interval[0], interval[1]
+            else:
+                # merge
+                new_interal = [
+                    last_start,
+                    max(last_end, interval[1])
+                ]
+                results.pop()
+                results.append(new_interal)
+                last_start, last_end = new_interal[0], new_interal[1]
+
+        return results
