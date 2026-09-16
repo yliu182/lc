@@ -30,4 +30,41 @@ from typing import List
 
 class Solution:
     def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
-        pass
+
+        # first find the row using binary search
+
+        m = len(matrix)
+        n = len(matrix[0])
+
+        row_left = 0
+        row_right = m - 1
+        row_target = -1
+        while row_left <= row_right:
+            mid = (row_left + row_right) // 2
+
+            # 对于第 mid 行，检查这一行的范围：
+            # matrix[mid][0]   # 这一行最小值
+            # matrix[mid][-1]  # 这一行最大值
+            if target < matrix[mid][0]:
+                row_right = mid - 1
+            elif target > matrix[mid][-1]:
+                row_left = mid + 1
+            else:
+                row_target = mid
+                break
+
+        if row_target == -1:
+            return False
+
+        col_left = 0
+        col_right = n - 1
+        while col_left <= col_right:
+            mid = (col_left + col_right) // 2
+            if target == matrix[row_target][mid]:
+                return True
+            elif target < matrix[row_target][mid]:
+                col_right = mid -1
+            else:
+                col_left = mid + 1
+
+        return False
