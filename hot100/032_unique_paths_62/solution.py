@@ -24,4 +24,20 @@ Constraints:
 
 class Solution:
     def uniquePaths(self, m: int, n: int) -> int:
-        pass
+        def dfs(
+            r_remain,
+            d_remain,
+        ):
+            if r_remain == 0 and d_remain == 0:
+                return 1
+
+            result = 0
+            if r_remain > 0:
+                result += dfs(r_remain - 1, d_remain)
+
+            if d_remain > 0:
+                result += dfs(r_remain, d_remain - 1)
+
+            return result
+
+        return dfs(m - 1, n - 1)
