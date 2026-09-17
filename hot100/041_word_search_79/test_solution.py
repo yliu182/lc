@@ -30,7 +30,7 @@ class TestWordSearch:
 
     def test_word_not_in_board(self, sol):
         board = [["A","B"],["C","D"]]
-        assert sol.exist(board, "ABD") is False
+        assert sol.exist(board, "ABC") is False
 
 
 if __name__ == "__main__":

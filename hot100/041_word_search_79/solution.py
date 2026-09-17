@@ -30,40 +30,83 @@ Constraints:
 
 from typing import List
 
-
 class Solution:
     """
     dfs(row, col, index)
     表示：
     当前位于 board[row][col]，尝试匹配 word[index] 以及后面的字符。
     """
+
+    #### First version, contains bugs
+    # def exist(self, board: List[List[str]], word: str) -> bool:
+
+    #     visited = [[0] * len(board[0]) for _ in range(len(board))] # List[List[int]] 0 or 1
+    #     solution = False
+
+    #     def dfs(row, col, index):
+    #         if index == len(word):
+    #             solution = True
+    #             return
+
+    #         if row < 0 or row >= len(board):
+    #             return
+
+    #         if col < 0 or col >= len(board[0]):
+    #             return
+
+    #         if visited[row][col] == 1:
+    #             return
+
+    #         if board[row][col] == word[index]:
+    #             visited[row][col] = 1
+    #             # try to move to (row+1, col)
+    #             dfs(row+1, col, index + 1)
+    #             dfs(row-1, col, index + 1)
+    #             dfs(row, col + 1, index + 1)
+    #             dfs(row, col - 1, index + 1)
+    #             visited[row][col] = 0
+
+    #     for i in range(len(board)):
+    #         for j in range(len(board[0])):
+    #             dfs(i, j, 0)
+
+    #     return solution
+
+
     def exist(self, board: List[List[str]], word: str) -> bool:
 
-        visited = [] # List[List[int]] 0 or 1
+        visited = [[0] * len(board[0]) for _ in range(len(board))] # List[List[int]] 0 or 1
         solution = False
 
         def dfs(row, col, index):
             if index == len(word):
-                solution = True
-                return
+                return True
 
             if row < 0 or row >= len(board):
-                return
+                return False
 
             if col < 0 or col >= len(board[0]):
-                return
+                return False
+
+            if visited[row][col] == 1:
+                return False
 
             if board[row][col] == word[index]:
                 visited[row][col] = 1
                 # try to move to (row+1, col)
-                dfs(row+1, col, index + 1)
-                dfs(row-1, col, index + 1)
-                dfs(row, col + 1, index + 1)
-                dfs(row, col - 1, index + 1)
+                if dfs(row+1, col, index + 1):
+                    return True
+                if dfs(row-1, col, index + 1):
+                    return True
+                if dfs(row, col + 1, index + 1):
+                    return True
+                if dfs(row, col - 1, index + 1):
+                    return True
                 visited[row][col] = 0
+            return False
 
-        for i in len(board):
-            for j in len(board[0]):
-                dfs(i, j, 0)
-
-        return solution
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if dfs(i, j, 0):
+                    return True
+        return False
