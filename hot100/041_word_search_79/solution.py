@@ -32,5 +32,38 @@ from typing import List
 
 
 class Solution:
+    """
+    dfs(row, col, index)
+    表示：
+    当前位于 board[row][col]，尝试匹配 word[index] 以及后面的字符。
+    """
     def exist(self, board: List[List[str]], word: str) -> bool:
-        pass
+
+        visited = [] # List[List[int]] 0 or 1
+        solution = False
+
+        def dfs(row, col, index):
+            if index == len(word):
+                solution = True
+                return
+
+            if row < 0 or row >= len(board):
+                return
+
+            if col < 0 or col >= len(board[0]):
+                return
+
+            if board[row][col] == word[index]:
+                visited[row][col] = 1
+                # try to move to (row+1, col)
+                dfs(row+1, col, index + 1)
+                dfs(row-1, col, index + 1)
+                dfs(row, col + 1, index + 1)
+                dfs(row, col - 1, index + 1)
+                visited[row][col] = 0
+
+        for i in len(board):
+            for j in len(board[0]):
+                dfs(i, j, 0)
+
+        return solution
