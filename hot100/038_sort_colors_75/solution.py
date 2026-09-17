@@ -25,8 +25,27 @@ Constraints:
 """
 
 from typing import List
-
+from collections import defaultdict
 
 class Solution:
+    # easy solution
+    # 时间：O(n)
+    # 额外空间：O(1)
+
     def sortColors(self, nums: List[int]) -> None:
-        pass
+        cnt_map = defaultdict(int)
+        for n in nums:
+            cnt_map[n] += 1
+
+        cur_pos = 0
+        for _ in range(cnt_map[0]):
+            nums[cur_pos] = 0
+            cur_pos += 1
+
+        for _ in range(cnt_map[1]):
+            nums[cur_pos] = 1
+            cur_pos += 1
+
+        for _ in range(cnt_map[2]):
+            nums[cur_pos] = 2
+            cur_pos += 1
