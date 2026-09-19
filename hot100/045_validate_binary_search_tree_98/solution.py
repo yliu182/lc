@@ -61,18 +61,38 @@ class Solution:
     #     return is_bst
 
     # recursive solution 2, where we do an inorder traversal
-    def isValidBST(self, root: Optional[TreeNode]) -> bool:
-        # do an inorder traversal using recursive
-        solution = []
-        def dfs(root):
-            if root is None:
-                return
-            dfs(root.left)
-            solution.append(root.val)
-            dfs(root.right)
-            return
+    # def isValidBST(self, root: Optional[TreeNode]) -> bool:
+    #     # do an inorder traversal using recursive
+    #     solution = []
+    #     def dfs(root):
+    #         if root is None:
+    #             return
+    #         dfs(root.left)
+    #         solution.append(root.val)
+    #         dfs(root.right)
+    #         return
 
-        dfs(root)
+    #     dfs(root)
+    #     for i in range(len(solution) - 1):
+    #         if solution[i] >= solution[i+1]:
+    #             return False
+    #     return True
+
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        # using a stack to mimic recursive preorder traversal
+        if root is None: return True
+
+        stack = []
+        cur = root
+        solution = []
+        while stack or cur:
+            while cur:
+                stack.append(cur)
+                cur = cur.left
+            cur = stack.pop()
+            solution.append(cur.val)
+            cur = cur.right
+
         for i in range(len(solution) - 1):
             if solution[i] >= solution[i+1]:
                 return False
