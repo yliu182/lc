@@ -81,7 +81,6 @@ class Solution:
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
         # using a stack to mimic recursive preorder traversal
         if root is None: return True
-
         stack = []
         cur = root
         solution = []
