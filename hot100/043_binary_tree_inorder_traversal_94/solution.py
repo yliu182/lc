@@ -33,4 +33,33 @@ class TreeNode:
 
 class Solution:
     def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
-        pass
+        solution = []
+        def dfs(node):
+            if node is None:
+                return
+
+            dfs(node.left)
+            solution.append(node.val)
+            dfs(node.right)
+
+        dfs(root)
+        return solution
+
+“”“
+DFS traversal: Time O(n), Space O(h), where h is the height of the tree. For a balanced tree it's O(log n), and worst case it's O(n).
+
+        1
+       / \
+      2   3
+     / \
+    4   5
+
+所以内存中的 call stack 是：
+┌──────────┐
+│ dfs(4)   │  ← 当前执行
+├──────────┤
+│ dfs(2)   │  ← 等待
+├──────────┤
+│ dfs(1)   │  ← 等待
+└──────────┘
+”“”
