@@ -30,9 +30,25 @@ class TreeNode:
 
 
 class Solution:
+    # def maxDepth(self, root: Optional[TreeNode]) -> int:
+    #     def dfs(root):
+    #         if root is None:
+    #             return 0
+    #         return max(dfs(root.left), dfs(root.right)) + 1
+    #     return dfs(root)
+
     def maxDepth(self, root: Optional[TreeNode]) -> int:
-        def dfs(root):
-            if root is None:
-                return 0
-            return max(dfs(root.left), dfs(root.right)) + 1
-        return dfs(root)
+        if root is None:
+            return 0
+
+        stack = [(root, 1)]
+        max_depth = float('-inf')
+        while stack:
+            node, height = stack.pop()
+            max_depth = max(max_depth, height)
+            if node.left:
+                stack.append((node.left, height + 1))
+
+            if node.right:
+                stack.append((node.right, height + 1))
+        return max_depth
