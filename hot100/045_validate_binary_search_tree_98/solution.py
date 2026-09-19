@@ -36,5 +36,28 @@ class TreeNode:
 
 
 class Solution:
+    # Yao's original recursive solution
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
-        pass
+
+        def dfs(node):
+            if node is None:
+                return None, None, True
+
+            ret_max = node.val
+            ret_min = node.val
+
+            left_max, left_min, left_is_bst = dfs(node.left)
+            right_max, right_min, right_is_bst = dfs(node.right)
+            ret = left_is_bst and right_is_bst
+            if node.left is not None:
+                ret = ret and (node.val > left_max)
+                ret_min = left_min
+            if right_min is not None:
+                ret = ret and (node.val < right_min)
+                ret_max = right_max
+            return ret_max, ret_min, ret
+
+        _, _, is_bst = dfs(root)
+        return is_bst
+
+    # recursive solution 2, where we do an inorder traversal
