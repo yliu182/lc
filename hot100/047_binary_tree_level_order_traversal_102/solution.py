@@ -22,7 +22,7 @@ Constraints:
 """
 
 from typing import Optional, List
-
+from collections import deque
 
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
@@ -33,4 +33,26 @@ class TreeNode:
 
 class Solution:
     def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
-        pass
+
+        queue = deque()
+        ret = []
+        if root is None:
+            return []
+
+        queue.append(root)
+
+        while len(queue) > 0:
+            res_list = []
+            next_queue = deque()
+            for _ in range(len(queue)):
+                c = queue.popleft()
+                res_list.append(c.val)
+                if c.left:
+                    next_queue.append(c.left)
+                if c.right:
+                    next_queue.append(c.right)
+
+            queue = next_queue
+            ret.append(res_list)
+
+        return ret
