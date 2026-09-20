@@ -36,31 +36,40 @@ class TreeNode:
 
 
 class Solution:
-    def flatten(self, root: Optional[TreeNode]) -> None:
-        """
-        Do not return anything, modify root in-place instead.
-        """
+    # def flatten(self, root: Optional[TreeNode]) -> None:
+    #     """
+    #     Do not return anything, modify root in-place instead.
+    #     """
+    #     def dfs(root):
+    #         # return the tail of the tree node (preorder)
+    #         if root is None:
+    #             return None
 
+    #         left_end = dfs(root.left)
+    #         right_end = dfs(root.right)
+    #         if left_end:
+    #             old_right = root.right
+    #             root.right = root.left
+    #             root.left = None
+    #             left_end.right = old_right
+    #         return right_end or left_end or root
+
+    #     dfs(root)
+
+    def flatten(self, root: Optional[TreeNode]) -> None:
+        prev = None
+        # prev 永远表示：当前 node 后面应该接的那个节点
         def dfs(root):
-            # return the tail of the tree node (preorder)
+            nonlocal prev
+
             if root is None:
                 return None
 
-            left_end = dfs(root.left)
-            right_end = dfs(root.right)
-            return_end = root
+            dfs(root.right)
+            dfs(root.left)
 
-            if left_end:
-                return_end = left_end
-                old_right = root.right
-                root.right = root.left
-                root.left = None
-                left_end.right = old_right
-                left_end.left = None
-
-            if right_end:
-                return_end = right_end
-                right_end.left = None
-            return return_end
+            root.right = prev
+            root.left = None
+            prev = root
 
         dfs(root)
