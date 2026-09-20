@@ -30,5 +30,23 @@ from typing import List
 
 
 class Solution:
+    # my original solution is totally wrong, the highest price may happen before the lowest price
+    #
+    # def maxProfit(self, prices: List[int]) -> int:
+    #     min_price = float('inf')
+    #     max_price = float('-inf')
+    #     for p in prices:
+    #         min_price = min(min_price, p)
+    #         max_price = max(max_price, p)
+
+    #     return max(max_price - min_price, 0)
+
     def maxProfit(self, prices: List[int]) -> int:
-        pass
+        if len(prices) <= 1:
+            return 0
+        prev_min = prices[0]
+        max_profit = 0
+        for i in range(1, len(prices)):
+            max_profit = max(max_profit, prices[i] - prev_min)
+            prev_min = min(prev_min, prices[i])
+        return max_profit
