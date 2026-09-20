@@ -32,7 +32,78 @@ class TreeNode:
         self.left = left
         self.right = right
 
+"""
+[3,9,20,15,7] pre
+[9,3,15,20,7] in
+3 is the root
+left [9], right is [15, 20, 7]
+
+so revisit the pre-order list, get the
+    left-subtree
+        preorder [9]
+        inorder [9]
+    right-subtree
+        preorder [20, 15, 7]
+        inorder [15, 20, 7]
+
+    recursive function to process the sub-tree
+"""
 
 class Solution:
+
+    """
+    是的，你当前解法的最坏时间复杂度是 O(n²)，更准确地说是 Θ(n²)。
+    主要成本来自两处：
+    r_idx = in_list.index(r)  # O(k)
+    以及数组切片：
+    left_in = in_list[:r_idx]
+    right_in = in_list[r_idx + 1:]
+    left_pre = pre_list[1:1 + len(left_in)]
+    right_pre = pre_list[1 + len(left_in):]
+    Python 切片会复制列表，也是 O(k)。
+    """
+    # def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+    #     def recursive(pre_list, in_list):
+    #         if len(pre_list) == 0 or len(in_list) == 0:
+    #             return None
+
+    #         r = pre_list[0]
+    #         r_idx = in_list.index(r)
+    #         left_in = in_list[0:r_idx]
+    #         right_in = in_list[r_idx+1:]
+    #         left_pre = pre_list[1:1+len(left_in)]
+    #         right_pre = pre_list[1+len(left_in):]
+
+    #         root_node = TreeNode(r)
+    #         root_node.left = recursive(left_pre, left_in)
+    #         root_node.right = recursive(right_pre, right_in)
+    #         return root_node
+
+    #     return recursive(preorder, inorder)
+
+
     def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
-        pass
+        inorder_index = {
+            val: i
+            for i, val in enumerate(inorder)
+        }
+        preorder_index = 0
+
+        def recursive(left, right):
+            """
+            left and right pos in the inorder list
+            """
+            nonlocal preorder_index
+
+            if left > right:
+                return None
+
+            root_value = preorder[preorder_index]
+            root_node = TreeNode(root_value)
+            mid = inorder_index[root_value]
+            preorder_index += 1
+            root_node.left = recursive(left, mid-1)
+            root_node.right = recursive(mid+1, right)
+            return root_node
+
+        return recursive(0, len(inorder) - 1)
