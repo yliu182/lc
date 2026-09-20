@@ -40,4 +40,27 @@ class Solution:
         """
         Do not return anything, modify root in-place instead.
         """
-        pass
+
+        def dfs(root):
+            # return the tail of the tree node (preorder)
+            if root is None:
+                return None
+
+            left_end = dfs(root.left)
+            right_end = dfs(root.right)
+            return_end = root
+
+            if left_end:
+                return_end = left_end
+                old_right = root.right
+                root.right = root.left
+                root.left = None
+                left_end.right = old_right
+                left_end.left = None
+
+            if right_end:
+                return_end = right_end
+                right_end.left = None
+            return return_end
+
+        dfs(root)
