@@ -42,4 +42,28 @@ class Node:
 
 class Solution:
     def copyRandomList(self, head: Optional[Node]) -> Optional[Node]:
-        pass
+        if head is None:
+            return None
+
+        o_ptr = head # iterator on old list
+        n_head = Node(head.val)
+        n_ptr = n_head
+        old_to_new = {None: None}
+        while o_ptr.next is not None:
+            old_to_new[o_ptr] = n_ptr
+            to_add = Node(o_ptr.next.val)
+            n_ptr.next = to_add
+            n_ptr = n_ptr.next
+            o_ptr = o_ptr.next
+
+        # 这一句话很容易漏掉，非常容易犯错
+        old_to_new[o_ptr] = n_ptr
+
+        old_p = head
+        new_p = n_head
+        while old_p is not None:
+            new_p.random = old_to_new[old_p.random]
+            old_p = old_p.next
+            new_p = new_p.next
+
+        return n_head
