@@ -39,5 +39,63 @@ class TreeNode:
 
 
 class Solution:
+    """
+    Yao's original solution, has a bug for all negative inputs
+    Each dfs returns the
+    (1) max sum of all paths that starts and ends in any nodes of tree
+    (2) max sum of all paths that ends in the root node
+
     def maxPathSum(self, root: Optional[TreeNode]) -> int:
-        pass
+        def dfs(root):
+            if root is None:
+                return 0, 0
+            l_max, l_end_max = dfs(root.left)
+            r_max, r_end_max = dfs(root.right)
+            new_end_max = max(l_end_max, r_end_max) + root.val
+            new_max = max(
+                max(l_max, r_max),
+                max(l_end_max, 0) + root.val + max(r_end_max, 0)
+            )
+            return new_max, new_end_max
+
+        max_sum, _ = dfs(root)
+        return max_sum
+    """
+
+    """
+    问题一：空树的最大路径不能是 0
+        题目要求路径非空。对于“子树内最大路径”，空树不应该贡献 0，否则它会超过所有负数路径。
+        应区分：
+            空树内部最大路径：负无穷
+            空树向父节点提供的贡献：0
+
+    问题二：向父节点返回的路径可以不选孩子
+        new_end_max = max(l_end_max, r_end_max) + root.val
+        这强制选择一个孩子。如果两个孩子都是负数，应该一个都不选：
+
+    更清晰的标准写法
+        只让 DFS 返回“当前节点向下的最大贡献”，另外维护全局答案
+
+    """
+    def maxPathSum(self, root: Optional[TreeNode]) -> int:
+        global_max = float('-inf')
+
+        def dfs(root):
+            nonlocal global_max
+            if root is None:
+                return 0
+            l_end_max = dfs(root.left)
+            r_end_max = dfs(root.right)
+            # 向父节点返回的单边路径：
+            ret = root.val + max(l_end_max, r_end_max, 0)
+
+            # 经过当前节点的完整路径：
+            global_max = max(
+                root.val + max(l_end_max, 0) + max(r_end_max, 0),
+                global_max,
+            )
+
+            return ret
+
+        dfs(root)
+        return global_max
