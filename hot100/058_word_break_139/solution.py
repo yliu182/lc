@@ -35,4 +35,15 @@ from typing import List
 
 class Solution:
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
-        pass
+
+        def dfs(pos):
+            if pos == len(s):
+                return True
+
+            for word in wordDict:
+                # python string does not have substr function
+                if s[pos: pos + len(word)] == word and dfs(pos + len(word)):
+                    return True
+            return False
+
+        return dfs(0)
