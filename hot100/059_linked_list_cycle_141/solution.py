@@ -61,17 +61,33 @@ class Solution:
             return True
     """
 
+    # def hasCycle(self, head: Optional[ListNode]) -> bool:
+    #     if head is None:
+    #         return False
+
+    #     visited = set()
+    #     p = head
+    #     while p:
+    #         if p in visited:
+    #             return True
+    #         else:
+    #             visited.add(p)
+    #             p = p.next
+
+    #     return False
+
+
     def hasCycle(self, head: Optional[ListNode]) -> bool:
         if head is None:
             return False
 
-        visited = set()
-        p = head
-        while p:
-            if p in visited:
+        slow = head
+        fast = head
+
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            if slow is fast:
                 return True
-            else:
-                visited.add(p)
-                p = p.next
 
         return False
