@@ -42,5 +42,36 @@ class ListNode:
 
 
 class Solution:
+
+    """
+    My first solution has big mistake.
+
     def hasCycle(self, head: Optional[ListNode]) -> bool:
-        pass
+        if head is None or head.next is None:
+            return False
+
+        p = head.next
+
+        while p and p != head:
+            p = p.next
+
+        if p is None:
+            return False
+        else:
+            return True
+    """
+
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        if head is None:
+            return False
+
+        visited = set()
+        p = head
+        while p:
+            if p in visited:
+                return True
+            else:
+                visited.add(p)
+                p = p.next
+
+        return False
