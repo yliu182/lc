@@ -26,49 +26,75 @@ Constraints:
 """
 
 # from collections import deque
+# import time
 
-import time
+# class LRUCache:
+#     def __init__(self, capacity: int):
+#         self.accessed_keys = {} # key -> timestamp
+#         self.cache = {}
+#         self.capacity = capacity
+#         self.timestamp = 0
 
-class LRUCache:
-    def __init__(self, capacity: int):
-        self.accessed_keys = {} # key -> timestamp
-        self.cache = {}
-        self.capacity = capacity
-        self.timestamp = 0
-
-    def get(self, key: int) -> int:
-        # 这是一个重要的 bug, 如果 key 不存在 的话，那么不应该 update 时间
-        # self.accessed_keys[key] = time.time()
-        # return self.cache.get(key, -1)
-        # if key in self.cache:
-        #     self.accessed_keys[key] = time.time()
-        # return self.cache.get(key, -1)
-        self.timestamp += 1
-        if key not in self.cache:
-            return -1
-        self.accessed_keys[key] = self.timestamp
-        return self.cache[key]
+#     def get(self, key: int) -> int:
+#         # 这是一个重要的 bug, 如果 key 不存在 的话，那么不应该 update 时间
+#         # self.accessed_keys[key] = time.time()
+#         # return self.cache.get(key, -1)
+#         # if key in self.cache:
+#         #     self.accessed_keys[key] = time.time()
+#         # return self.cache.get(key, -1)
+#         self.timestamp += 1
+#         if key not in self.cache:
+#             return -1
+#         self.accessed_keys[key] = self.timestamp
+#         return self.cache[key]
 
 
-    def put(self, key: int, value: int) -> None:
-        """
-        if key already exist
-            update only
-        else
-            if capacity is full before put:
-                first erase the earlier access key first
-            write
-        """
-        if key not in self.cache and len(self.cache) == self.capacity:
-            # find the oldest key
-            oldest_key = None
-            smallest_timestamp = float("Inf")
-            for k, t in self.accessed_keys.items():
-                if t < smallest_timestamp:
-                    oldest_key = k
-                    smallest_timestamp = t
-            self.accessed_keys.pop(oldest_key)
-            self.cache.pop(oldest_key)
-        self.timestamp += 1
-        self.cache[key] = value
-        self.accessed_keys[key] = self.timestamp
+#     def put(self, key: int, value: int) -> None:
+#         """
+#         if key already exist
+#             update only
+#         else
+#             if capacity is full before put:
+#                 first erase the earlier access key first
+#             write
+#         """
+#         if key not in self.cache and len(self.cache) == self.capacity:
+#             # find the oldest key
+#             oldest_key = None
+#             smallest_timestamp = float("Inf")
+#             for k, t in self.accessed_keys.items():
+#                 if t < smallest_timestamp:
+#                     oldest_key = k
+#                     smallest_timestamp = t
+#             self.accessed_keys.pop(oldest_key)
+#             self.cache.pop(oldest_key)
+#         self.timestamp += 1
+#         self.cache[key] = value
+#         self.accessed_keys[key] = self.timestamp
+
+
+
+# from collections import OrderedDict
+
+# """
+# get：平均 O(1)
+# put：平均 O(1)
+# 空间：O(capacity)
+# """
+# class LRUCache:
+#     def __init__(self, capacity: int):
+#         self.capacity = capacity
+#         self.cache = OrderedDict()
+
+#     def get(self, key: int) -> int:
+#         if key not in self.cache:
+#             return -1
+#         self.cache.move_to_end(key)
+#         return self.cache[key]
+
+
+#     def put(self, key: int, value: int) -> None:
+#         self.cache[key] = value
+#         self.cache.move_to_end(key)
+#         if len(self.cache) > self.capacity:
+#             self.cache.popitem(last=False)
