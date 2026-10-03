@@ -103,3 +103,73 @@ class Solution:
                 prev = prev.next
         return dummy.next
 """
+
+
+"""
+yao 写的版本 还是有 bug
+
+主要问题在寻找中点的逻辑：
+fast = head
+slow = head
+
+while fast and fast.next:
+    fast = fast.next.next
+    slow = slow.next
+对于两个节点：
+    1 -> 2
+    循环一次后：
+    slow 指向 2
+    fast 指向 None
+然后：
+right_head = slow.next  # None
+slow.next = None
+左半部分仍然是完整的 1 -> 2，没有真正拆分。接着：
+self.sortList(head)
+会不断收到相同的两节点链表，最终触发：
+RecursionError: maximum recursion depth exceeded
+应让 fast 从 head.next 开始：
+slow = head
+fast = head.next
+
+class Solution:
+    def _merge(self, head1: Optional[ListNode], head2: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = ListNode()
+        p1 = head1
+        p2 = head2
+        cur = dummy
+        while p1 or p2:
+            if p1 and p2:
+                if p1.val <= p2.val:
+                    cur.next = p1
+                    p1 = p1.next
+                else:
+                    cur.next = p2
+                    p2 = p2.next
+            elif p1:
+                cur.next = p1
+                p1 = p1.next
+            else:
+                cur.next = p2
+                p2 = p2.next
+            cur = cur.next
+
+        return dummy.next
+
+    def sortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if head is None or head.next is None:
+            return head
+        fast = head
+        slow = head
+
+        while fast and fast.next:
+            fast = fast.next.next
+            slow = slow.next
+
+        right_head = slow.next
+        slow.next = None
+
+        first_head = self.sortList(head)
+        second_head = self.sortList(right_head)
+
+        return self._merge(first_head, second_head)
+"""
