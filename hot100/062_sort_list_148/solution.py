@@ -173,3 +173,39 @@ class Solution:
 
         return self._merge(first_head, second_head)
 """
+
+class Solution:
+    def _merge(self, head1: Optional[ListNode], head2: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = ListNode()
+        p1 = head1
+        p2 = head2
+        cur = dummy
+        while p1 and p2:
+            if p1 and p2:
+                if p1.val <= p2.val:
+                    cur.next = p1
+                    p1 = p1.next
+                else:
+                    cur.next = p2
+                    p2 = p2.next
+            cur = cur.next
+        cur.next = p1 if p1 else p2
+        return dummy.next
+
+    def sortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if head is None or head.next is None:
+            return head
+        fast = head
+        slow = head.next
+
+        while fast and fast.next:
+            fast = fast.next.next
+            slow = slow.next
+
+        right_head = slow.next
+        slow.next = None
+
+        first_head = self.sortList(head)
+        second_head = self.sortList(right_head)
+
+        return self._merge(first_head, second_head)
