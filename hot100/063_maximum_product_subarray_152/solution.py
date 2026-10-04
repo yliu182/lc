@@ -27,5 +27,59 @@ from typing import List
 
 
 class Solution:
+    """
+    这是 yao 写的第一版，但是有个严重的 bug
+
     def maxProduct(self, nums: List[int]) -> int:
-        pass
+        # the max product of subarray that ends with current idx
+        # or starts from the current idx
+        if len(nums) == 1:
+            return nums[0]
+
+        cur_min_product = nums[0]
+        cur_max_product = nums[0]
+        global_max = nums[0]
+
+        for x in nums[1:]:
+            cur_min_product = min(
+                cur_max_product * x,
+                cur_min_product * x,
+                x
+            )
+            cur_max_product = max(
+                cur_max_product * x,
+                cur_min_product * x,
+                x
+            )
+            global_max = max(global_max, cur_max_product)
+
+        return global_max
+    """
+
+
+    def maxProduct(self, nums: List[int]) -> int:
+        # the max product of subarray that ends with current idx
+        # or starts from the current idx
+        if len(nums) == 1:
+            return nums[0]
+
+        cur_min_product = nums[0]
+        cur_max_product = nums[0]
+        global_max = nums[0]
+
+        for x in nums[1:]:
+            prev_max = cur_max_product
+            prev_min = cur_min_product
+            cur_min_product = min(
+                prev_max * x,
+                prev_min * x,
+                x
+            )
+            cur_max_product = max(
+                prev_max * x,
+                prev_min * x,
+                x
+            )
+            global_max = max(global_max, cur_max_product)
+
+        return global_max
