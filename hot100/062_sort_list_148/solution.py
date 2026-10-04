@@ -174,20 +174,21 @@ class Solution:
         return self._merge(first_head, second_head)
 """
 
+"""
+正确的版本，但是空间复杂度比较高 O(logN), 不是 O(1)
+"""
+"""
 class Solution:
-    def _merge(self, head1: Optional[ListNode], head2: Optional[ListNode]) -> Optional[ListNode]:
+    def _merge(self, p1: Optional[ListNode], p2: Optional[ListNode]) -> Optional[ListNode]:
         dummy = ListNode()
-        p1 = head1
-        p2 = head2
         cur = dummy
         while p1 and p2:
-            if p1 and p2:
-                if p1.val <= p2.val:
-                    cur.next = p1
-                    p1 = p1.next
-                else:
-                    cur.next = p2
-                    p2 = p2.next
+            if p1.val <= p2.val:
+                cur.next = p1
+                p1 = p1.next
+            else:
+                cur.next = p2
+                p2 = p2.next
             cur = cur.next
         cur.next = p1 if p1 else p2
         return dummy.next
@@ -195,8 +196,8 @@ class Solution:
     def sortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
         if head is None or head.next is None:
             return head
-        fast = head
-        slow = head.next
+        fast = head.next
+        slow = head
 
         while fast and fast.next:
             fast = fast.next.next
@@ -209,3 +210,79 @@ class Solution:
         second_head = self.sortList(right_head)
 
         return self._merge(first_head, second_head)
+"""
+
+
+class Solution:
+    def sortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        """
+        外循环
+            iterate 整个长度，切成 size 的一截一截的。
+
+            内循环：
+                given 上一次内循环已经处理过的list 的末尾 node,
+                把两个sorted list merge, 返回新的 head 和 tail
+                和之前的末尾node 给接起来，然后更新末尾node
+        """
+        if head is None or head.next is None:
+            return head
+
+        size = 1
+        length = 0
+        p = head
+        while p:
+            length += 1
+            p = p.next
+
+        dummy = ListNode(0, head)
+        while size < length:
+            prev = dummy
+            cur = prev.next
+            while cur:
+                right = self._split(cur, size)
+                next_head = self._split(right, size)
+                merged_head, merged_tail = self._merge(cur, right)
+                prev.next = merged_head
+                merged_tail.next = next_head
+                # update key pointers
+                prev = merged_tail
+                cur = merged_tail.next
+            size *= 2
+
+        return dummy.next
+
+
+    def _split(self, head: Optional[ListNode], size: int) -> Optional[ListNode]:
+        if not head:
+            return None
+        p = head
+        for i in range(size - 1):
+            if p:
+                p = p.next
+        # p is the end of the current segment
+        if p:
+            next_head = p.next
+            p.next = None
+        else:
+            next_head = None
+        return next_head
+
+
+    def _merge(self, p1: Optional[ListNode], p2: Optional[ListNode]) -> tuple[Optional[ListNode], Optional[ListNode]]:
+        dummy = ListNode()
+        cur = dummy
+        tail = ListNode()
+        while p1 and p2:
+            if p1.val <= p2.val:
+                cur.next = p1
+                p1 = p1.next
+            else:
+                cur.next = p2
+                p2 = p2.next
+            cur = cur.next
+
+        cur.next = p1 if p1 else p2
+        while cur:
+            tail = cur
+            cur = cur.next
+        return dummy.next, tail
