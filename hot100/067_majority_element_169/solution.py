@@ -27,6 +27,9 @@ from typing import List
 
 
 class Solution:
+    """
+    Yao 写的第一版解法
+
     def majorityElement(self, nums: List[int]) -> int:
         answer = nums[0]
         cnt = 1
@@ -42,4 +45,18 @@ class Solution:
                 cnt -= 1
                 if cnt == 0:
                     answer = None
+        return answer
+    """
+
+    def majorityElement(self, nums: List[int]) -> int:
+        cnt = 0
+        for i in range(len(nums)):
+            if cnt == 0:
+                answer = nums[i]
+                cnt = 1
+            else:
+                if nums[i] == answer:
+                    cnt += 1
+                else:
+                    cnt -= 1
         return answer
