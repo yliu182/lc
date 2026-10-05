@@ -26,19 +26,52 @@ Constraints:
 """
 
 
+
+""""
+Yao 写的第一个版本，错误的理解成了 minHeap
+
 class MinStack:
 
     def __init__(self):
-        pass
+        self.heap = []
+
 
     def push(self, val: int) -> None:
-        pass
+        # append the new element to the end, and sift_up
+        self.heap.append(val)
+        i = len(self.heap) - 1
+
+        while True:
+            parent = (i-1) // 2
+            if parent < 0 or self.heap[parent] <= self.heap[i]:
+                break
+            self.heap[parent], self.heap[i] = self.heap[i], self.heap[parent]
+            i = parent
 
     def pop(self) -> None:
-        pass
+        # swap heap[0] with heap[last], and do sift_down
+        size = len(self.heap)
+        self.heap[0], self.heap[size-1] = self.heap[size-1], self.heap[0]
+        self.heap.pop()
+        i = 0
+        while True:
+            smallest = i
+            left = 2 * i + 1
+            right = 2 * i + 2
+            if left < len(self.heap) and self.heap[left] < self.heap[smallest]:
+                smallest = left
+            if right < len(self.heap) and self.heap[right] < self.heap[smallest]:
+                smallest = right
+            if smallest == i:
+                break
+            self.heap[i], self.heap[smallest] = self.heap[smallest], self.heap[i]
+            i = smallest
+
 
     def top(self) -> int:
-        pass
+        return self.heap[0]
 
     def getMin(self) -> int:
-        pass
+        return self.heap[0]
+
+"""
