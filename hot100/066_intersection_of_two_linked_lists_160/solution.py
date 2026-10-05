@@ -40,5 +40,42 @@ class ListNode:
 
 
 class Solution:
+
+    """
+假设：
+A 独有部分长度 = a
+B 独有部分长度 = b
+公共部分长度 = c
+两个指针走过的路径分别是：
+pointer_a：a + c + b
+pointer_b：b + c + a
+总长度相同：
+a + c + b = b + c + a
+所以两个指针会消除链表长度差，并同时到达相交节点。
+如果没有交点，它们各自走完两个链表后，会同时变成 None：
+pointer_a is pointer_b  # True
+
+    """
     def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> Optional[ListNode]:
-        pass
+        p1 = headA
+        p2 = headB
+        p1_concated = False
+        p2_concated = False
+        while True:
+            if p1 is None:
+                if not p1_concated:
+                    p1 = headB
+                    p1_concated = True
+            if p2 is None:
+                if not p2_concated:
+                    p2 = headA
+                    p2_concated = True
+
+            if p1 is None or p2 is None:
+                return None
+            if p1 == p2:
+                return p1
+            p1 = p1.next
+            p2 = p2.next
+
+        return None
