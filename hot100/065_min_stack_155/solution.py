@@ -82,8 +82,6 @@ class MinStack:
         # each element is a tuple(val, smallest val so far)
         self.heap = []
 
-
-
     def push(self, val: int) -> None:
         if len(self.heap) == 0:
             self.heap.append((val, val))
