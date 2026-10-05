@@ -63,3 +63,38 @@ class Solution:
             nums[i], nums[j] = nums[j], nums[i]
             i += 1
             j -= 1
+
+
+    """
+    复杂度：
+        时间：O(n)
+        空间：O(n)
+    def rotate(self, nums: List[int], k: int) -> None:
+        n = len(nums)
+        k %= n
+        rotated = [0] * n
+        for i, value in enumerate(nums):
+            rotated[(i + k) % n] = value
+
+        nums[:] = rotated
+    """
+
+    """
+    O(n) and O(1)
+
+    def rotate(self, nums: List[int], k: int) -> None:
+        n = len(nums)
+        start = 0
+        rotated = 0
+        while rotated < n:
+            cur = start
+            prev_val = nums[cur]
+            while True:
+                next_idx = (cur + k) % n
+                nums[next_idx], prev_val = prev_val, nums[next_idx]
+                rotated += 1
+                cur = next_idx
+                if cur == start:
+                    break
+            start += 1
+    """
