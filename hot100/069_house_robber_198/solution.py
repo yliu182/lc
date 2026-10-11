@@ -25,9 +25,21 @@ Constraints:
     0 <= nums[i] <= 400
 """
 
+from functools import cache
 from typing import List
 
 
 class Solution:
     def rob(self, nums: List[int]) -> int:
-        pass
+
+        @cache
+        def dfs(idx):
+            if idx >= len(nums):
+                return 0
+            max_result = max(
+                nums[idx] + dfs(idx + 2),
+                dfs(idx+1)
+            )
+            return max_result
+
+        return dfs(0)
