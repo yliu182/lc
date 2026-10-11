@@ -30,8 +30,38 @@ Constraints:
 """
 
 from typing import List
-
+from collections import defaultdict, deque
 
 class Solution:
+    """
+    Yao's solution, has initialization bug
+    """
+    """
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        pass
+        in_degrees = defaultdict(int) # has bug
+        graph = defaultdict(list)
+
+        for edge in prerequisites:
+            a = edge[0]
+            b = edge[1]
+            in_degrees[a] += 1
+            graph[b].append(a)
+
+        sorted_list = []
+        q = deque()
+        # initiation step
+        for k, cnt in in_degrees.items():
+            if cnt == 0:
+                q.append(k)
+
+        while q:
+            k = q.popleft()
+            sorted_list.append(k)
+            if k in graph:
+                for e in graph[k]: # the end
+                    in_degrees[e] -= 1
+                    if in_degrees[e] == 0:
+                        q.append(e)
+
+        return len(sorted_list) == numCourses
+    """
