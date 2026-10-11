@@ -38,4 +38,28 @@ from typing import List
 
 class Solution:
     def numIslands(self, grid: List[List[str]]) -> int:
-        pass
+
+        # dfs(i, j)
+
+        def dfs_swap(row, col, grid, not_flip=False):
+            if row < 0 or row >= len(grid) or col < 0 or col >= len(grid[0]) or grid[row][col] == "0":
+                return
+            # flip
+            if not not_flip:
+                grid[row][col] = "0"
+
+            dfs_swap(row+1, col, grid)
+            dfs_swap(row, col + 1, grid)
+
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j] == "1":
+                    dfs_swap(i, j, grid, True)
+
+        ret = 0
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j] == "1":
+                    ret += 1
+
+        return ret
