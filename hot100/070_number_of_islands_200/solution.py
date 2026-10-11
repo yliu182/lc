@@ -45,21 +45,18 @@ class Solution:
             if row < 0 or row >= len(grid) or col < 0 or col >= len(grid[0]) or grid[row][col] == "0":
                 return
             # flip
-            if not not_flip:
-                grid[row][col] = "0"
+            grid[row][col] = "0"
 
             dfs_swap(row+1, col, grid)
             dfs_swap(row, col + 1, grid)
-
-        for i in range(len(grid)):
-            for j in range(len(grid[0])):
-                if grid[i][j] == "1":
-                    dfs_swap(i, j, grid, True)
+            dfs_swap(row-1, col, grid)
+            dfs_swap(row, col - 1, grid)
 
         ret = 0
         for i in range(len(grid)):
             for j in range(len(grid[0])):
                 if grid[i][j] == "1":
                     ret += 1
+                    dfs_swap(i, j, grid)
 
         return ret
