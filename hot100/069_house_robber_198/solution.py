@@ -30,16 +30,36 @@ from typing import List
 
 
 class Solution:
+    # def rob(self, nums: List[int]) -> int:
+
+    #     @cache
+    #     def dfs(idx):
+    #         if idx >= len(nums):
+    #             return 0
+    #         max_result = max(
+    #             nums[idx] + dfs(idx + 2),
+    #             dfs(idx+1)
+    #         )
+    #         return max_result
+
+    #     return dfs(0)
+
+
     def rob(self, nums: List[int]) -> int:
+        dp = [0] * len(nums)
+        size = len(nums)
+        if size <= 1:
+            return nums[0]
+        elif size == 2:
+            return max(nums[0], nums[1])
 
-        @cache
-        def dfs(idx):
-            if idx >= len(nums):
-                return 0
-            max_result = max(
-                nums[idx] + dfs(idx + 2),
-                dfs(idx+1)
+        dp[size - 1] = nums[size-1]
+        dp[size - 2] = max(nums[size - 1], nums[size - 2])
+
+        for i in range(size - 3, -1, -1):
+            dp[i] = max(
+                dp[i+1],
+                dp[i+2] + nums[i],
             )
-            return max_result
 
-        return dfs(0)
+        return dp[0]
