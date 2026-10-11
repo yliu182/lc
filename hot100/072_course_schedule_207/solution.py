@@ -65,3 +65,26 @@ class Solution:
 
         return len(sorted_list) == numCourses
     """
+
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        in_degrees = [0] * numCourses
+        graph = defaultdict(list)
+        for edge in prerequisites:
+            a = edge[0]
+            b = edge[1]
+            in_degrees[a] += 1
+            graph[b].append(a)
+
+        sorted_list = []
+        # initiation step
+        q = deque([k for k, cnt in enumerate(in_degrees) if cnt == 0])
+        while q:
+            k = q.popleft()
+            sorted_list.append(k)
+            if k in graph:
+                for e in graph[k]: # the end
+                    in_degrees[e] -= 1
+                    if in_degrees[e] == 0:
+                        q.append(e)
+
+        return len(sorted_list) == numCourses
