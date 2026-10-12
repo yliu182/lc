@@ -26,16 +26,43 @@ Constraints:
 """
 
 
-class Trie:
-
+class Node:
     def __init__(self):
-        pass
+        self.children = {}
+        self.eow = False
+
+class Trie:
+    def __init__(self):
+        self.root = Node()
 
     def insert(self, word: str) -> None:
-        pass
+        cur = self.root
+        for c in word:
+            # if c in cur.children:
+            #     cur = cur.children[c]
+            # else:
+            #     new_node = Node()
+            #     cur.children[c] = new_node
+            #     cur = new_node
+            if c not in cur.children:
+                cur.children[c] = Node()
+            cur = cur.children[c]
+        cur.eow = True
+
 
     def search(self, word: str) -> bool:
-        pass
+        cur = self.root
+        for c in word:
+            if c not in cur.children:
+                return False
+            cur = cur.children[c]
+        return cur.eow
+
 
     def startsWith(self, prefix: str) -> bool:
-        pass
+        cur = self.root
+        for c in prefix:
+            if c not in cur.children:
+                return False
+            cur = cur.children[c]
+        return True
