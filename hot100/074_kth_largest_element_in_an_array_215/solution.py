@@ -36,6 +36,7 @@ class Solution:
     Best video to explain this:
         https://www.youtube.com/watch?v=duln2xAZhBA
     """
+    """
     def findKthLargest(self, nums: List[int], k: int) -> int:
         l = 0
         r = len(nums) - 1
@@ -58,3 +59,50 @@ class Solution:
                 l = i + 1
             else:
                 r = i - 1
+    """
+
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        heap = []
+
+        def push(value: int) -> None:
+            heap.append(value)
+            index = len(heap) - 1
+
+            # 向上调整
+            while index > 0:
+                parent = (index - 1) // 2
+
+                if heap[parent] <= heap[index]:
+                    break
+
+                heap[parent], heap[index] = heap[index], heap[parent]
+                index = parent
+
+        def replace_min(value: int) -> None:
+            heap[0] = value
+            index = 0
+            # 向下调整
+            while True:
+                left = index * 2 + 1
+                right = index * 2 + 2
+                smallest = index
+
+                if left < len(heap) and heap[left] < heap[smallest]:
+                    smallest = left
+
+                if right < len(heap) and heap[right] < heap[smallest]:
+                    smallest = right
+
+                if smallest == index:
+                    break
+
+                heap[index], heap[smallest] = heap[smallest], heap[index]
+                index = smallest
+
+        for num in nums:
+            if len(heap) < k:
+                push(num)
+            elif num > heap[0]:
+                replace_min(num)
+
+        return heap[0]
