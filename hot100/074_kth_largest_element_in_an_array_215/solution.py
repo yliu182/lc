@@ -32,6 +32,9 @@ class Solution:
     [i, j) stores processed numbers that is bigger than pivot
     [j, r) stored unprocessed numbers
     nums[r] is the pivot
+
+    Best video to explain this:
+        https://www.youtube.com/watch?v=duln2xAZhBA
     """
     def findKthLargest(self, nums: List[int], k: int) -> int:
         l = 0
