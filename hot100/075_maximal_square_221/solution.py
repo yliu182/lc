@@ -41,6 +41,7 @@ class Solution:
     - 遍历过程中记录最大边长，最终返回最大边长 × 最大边长。
     时间复杂度为 O(mn)，空间复杂度为 O(mn)，后续还可以优化为 O(n)。
     """
+    """
     def maximalSquare(self, matrix: List[List[str]]) -> int:
         n_row = len(matrix)
         n_col = len(matrix[0])
@@ -70,3 +71,40 @@ class Solution:
                     dp[i][j] = min(dp[i-1][j-1], dp[i-1][j], dp[i][j-1]) + 1
                 ret = max(ret, dp[i][j])
         return ret * ret
+    """
+
+    """
+    1. DP 数组
+    - 之前：二维 dp[i][j]，保存所有格子的结果。
+    - 优化后：一维 dp[j]，只保存上一行和当前行需要的数据。
+    2. 三个相邻状态
+    - top = dp[j]：更新前表示上方。
+    - dp[j - 1]：更新后表示左方。
+    - top_left：保存更新前的左上方。
+    3. 边界处理
+    - 之前需要单独初始化第一行和第一列。
+    - 优化后使用长度为 n_col + 1 的数组，额外的 0 作为哨兵，不需要单独初始化。
+    4. 复杂度
+    - 两者时间都是 O(mn)。
+    - 空间从 O(mn) 降为 O(n)。
+    """
+    def maximalSquare(self, matrix: List[List[str]]) -> int:
+        n_col = len(matrix[0])
+        dp = [0] * (n_col + 1)
+        max_side = 0
+
+        for row in matrix:
+            top_left = 0
+
+            for j in range(1, n_col + 1):
+                top = dp[j]
+
+                if row[j - 1] == "1":
+                    dp[j] = min(top_left, top, dp[j - 1]) + 1
+                    max_side = max(max_side, dp[j])
+                else:
+                    dp[j] = 0
+
+                top_left = top
+
+        return max_side * max_side
