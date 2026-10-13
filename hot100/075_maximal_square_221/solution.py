@@ -31,5 +31,42 @@ from typing import List
 
 
 class Solution:
+    """
+    推荐使用二维动态规划。
+    - 定义状态：dp[i][j] 表示以位置 (i, j) 为右下角、且全部由 1 组成的最大正方形边长。
+    - 如果当前格子是 0，则 dp[i][j] = 0。
+    - 如果当前格子是 1，它能扩展多大取决于三个位置：正上方、正左方、左上方。取三者最小边长再加 1。
+    - 为什么取最小值：扩大正方形时，这三个方向必须同时满足条件，最短的一边决定能扩展的大小。
+    - 第一行和第一列只能形成边长为 0 或 1 的正方形。
+    - 遍历过程中记录最大边长，最终返回最大边长 × 最大边长。
+    时间复杂度为 O(mn)，空间复杂度为 O(mn)，后续还可以优化为 O(n)。
+    """
     def maximalSquare(self, matrix: List[List[str]]) -> int:
-        pass
+        n_row = len(matrix)
+        n_col = len(matrix[0])
+
+        dp = [[0] * n_col for _ in range(n_row)]
+        # initialization
+        ret = 0
+        for i in range(n_row):
+            dp[i][0] = 1 if matrix[i][0] == "1" else 0
+            if dp[i][0] == 1:
+                ret = 1
+
+        for j in range(n_col):
+            dp[0][j] = 1 if matrix[0][j] == "1" else 0
+            if dp[0][j] == 1:
+                ret = 1
+
+        for i in range(1, n_row, 1):
+            for j in range(1, n_col, 1):
+                """
+                dp[i-1][j-1] dp[i-1][j]
+                dp[i][j-1]   dp[i][j]
+                """
+                if matrix[i][j] == "0":
+                    dp[i][j] = 0
+                else:
+                    dp[i][j] = min(dp[i-1][j-1], dp[i-1][j], dp[i][j-1]) + 1
+                ret = max(ret, dp[i][j])
+        return ret * ret
