@@ -28,7 +28,64 @@ class ListNode:
         self.val = val
         self.next = next
 
+'''
+1 2 3 4 5
+f
+s
+
+    f
+  s
+        f
+    s
+
+1 2 3 4 5 6
+      s
+            f
+'''
+
 
 class Solution:
+    def _reverse(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        cur = head
+        prev = None
+        while cur:
+            tmp = cur.next
+            cur.next = prev
+            prev = cur
+            cur = tmp
+        return prev
+
+    def _is_identical(self, head1: ListNode, head2: ListNode, length: int) -> bool:
+        p1 = head1
+        p2 = head2
+        for _ in range(length):
+            if p1 is None or p2 is None or p1.val != p2.val:
+                return False
+            p1 = p1.next
+            p2 = p2.next
+        return True
+
+    '''
+    [5 5 5 5]
+    fast
+    slow
+    step 2
+    '''
     def isPalindrome(self, head: Optional[ListNode]) -> bool:
-        pass
+        # first find the middle position
+        fast = head
+        slow = head
+        step = 0
+        while fast and fast.next:
+            fast = fast.next.next
+            slow = slow.next
+            step += 1
+
+        if fast:
+            head2 = slow.next
+            reversed_head2 = self._reverse(head2)
+            return self._is_identical(head, reversed_head2, step)
+        else:
+            head2 = slow
+            reversed_head2 = self._reverse(head2)
+            return self._is_identical(head, reversed_head2, step)
