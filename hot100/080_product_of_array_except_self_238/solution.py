@@ -30,5 +30,30 @@ from typing import List
 
 
 class Solution:
+    '''
     def productExceptSelf(self, nums: List[int]) -> List[int]:
-        pass
+        left_product = [1] * len(nums)
+        for i in range(1, len(nums), 1):
+            left_product[i] = nums[i-1] * left_product[i-1]
+
+        ret = [0] * len(nums)
+        right_product = 1
+        for j in range(len(nums) - 1 , 0, -1):
+            ret[j] = left_product[j] * right_product
+            right_product *= nums[j]
+
+        ret[0] = right_product
+        return ret
+    '''
+
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+        ret = [1] * len(nums)
+        # first pass, calculate the left-side and temporarily store in result array
+        for i in range(1, len(nums), 1):
+            ret[i] = nums[i-1] * ret[i-1]
+        right_product = 1
+        for j in range(len(nums) - 1 , 0, -1):
+            ret[j] = ret[j] * right_product
+            right_product *= nums[j]
+        ret[0] = right_product
+        return ret
