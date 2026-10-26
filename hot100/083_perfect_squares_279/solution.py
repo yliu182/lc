@@ -21,7 +21,22 @@ Constraints:
     - 1 <= n <= 10^4
 """
 
+import math
 
 class Solution:
     def numSquares(self, n: int) -> int:
-        pass
+        if n <= 1:
+            return n
+        dp = [float('inf')] * (n+1)
+        dp[0] = 0
+        dp[1] = 1
+        dp[2] = 2
+        for i in range(3, n+1):
+            for j in range(1, (int)(math.sqrt(i)) + 1):
+                '''
+                j^2 在 Python 中表示按位异或，不是平方。
+                平方应该写成：j * j 或者：j ** 2
+                '''
+                dp[i] = min(dp[i], dp[i - j ** 2] + 1)
+
+        return dp[n]
