@@ -84,17 +84,31 @@ class Codec:
         return ",".join(ret)
 
 
+    # def deserialize(self, data: str) -> Optional[TreeNode]:
+    #     tokens = iter(data.split(","))
+
+    #     def dfs() -> Optional[TreeNode]:
+    #         next_token = next(tokens)
+    #         if next_token == "#":
+    #             return None
+
+    #         node = TreeNode(int(next_token))
+    #         node.left = dfs()
+    #         node.right = dfs()
+    #         return node
+
+    #     return dfs()
+
     def deserialize(self, data: str) -> Optional[TreeNode]:
-        tokens = iter(data.split(","))
+        data = data.split(',')
+        def dfs(index: int):
+            if data[index] == '#':
+                return None, index + 1
 
-        def dfs() -> Optional[TreeNode]:
-            next_token = next(tokens)
-            if next_token == "#":
-                return None
+            node = TreeNode(int(data[index]))
+            node.left, next_idx = dfs(index+1)
+            node.right, next_idx = dfs(next_idx)
+            return node, next_idx
 
-            node = TreeNode(int(next_token))
-            node.left = dfs()
-            node.right = dfs()
-            return node
-
-        return dfs()
+        root_node, _ = dfs(0)
+        return root_node
