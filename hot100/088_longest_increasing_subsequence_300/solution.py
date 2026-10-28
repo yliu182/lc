@@ -27,4 +27,13 @@ from typing import List
 
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
-        pass
+        n = len(nums)
+        dp = [1] * n
+        dp[n-1] = 1
+        max_ret = 1
+        for i in range(n-2,-1,-1):
+            for j in range(i+1, n):
+                if nums[i] < nums[j]:
+                    dp[i] = max(dp[i], 1 + dp[j])
+                    max_ret = max(dp[i], max_ret)
+        return max_ret
