@@ -37,4 +37,14 @@ class TreeNode:
 
 class Solution:
     def rob(self, root: Optional[TreeNode]) -> int:
-        pass
+        def dfs_with_root(root: TreeNode) -> int:
+            if root is None:
+                return 0
+            return dfs_no_root(root.left) + root.val + dfs_no_root(root.right)
+
+        def dfs_no_root(root: TreeNode) -> int:
+            if root is None:
+                return 0
+            return max(dfs_no_root(root.left), dfs_with_root(root.left)) + max(dfs_no_root(root.right), dfs_with_root(root.right))
+
+        return max(dfs_with_root(root), dfs_no_root(root))
