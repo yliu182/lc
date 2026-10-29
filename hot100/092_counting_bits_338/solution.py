@@ -20,15 +20,27 @@ from typing import List
 
 
 class Solution:
-    def countBits(self, n: int) -> List[int]:
-        def get_bits(n: int) -> int:
-            cnt = 0
-            while n > 0:
-                cnt += (n & 1)
-                n = n >> 1
-            return cnt
 
-        ret = []
-        for i in range(n+1):
-            ret.append(get_bits(i))
-        return ret
+    # 总时间为 O(n log n)。
+    # def countBits(self, n: int) -> List[int]:
+    #     def get_bits(n: int) -> int:
+    #         cnt = 0
+    #         while n > 0:
+    #             cnt += (n & 1)
+    #             n = n >> 1
+    #         return cnt
+
+    #     ret = []
+    #     for i in range(n+1):
+    #         ret.append(get_bits(i))
+    #     return ret
+
+    def countBits(self, n: int) -> List[int]:
+        '''
+        ans[i] = ans[i>>1] + (i & 1)
+        '''
+        ans = (n+1) * [0]
+
+        for i in range(1, n+1, 1):
+            ans[i] = ans[i>>1] + (i & 1)
+        return ans
