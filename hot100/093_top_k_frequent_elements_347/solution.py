@@ -20,8 +20,28 @@ Constraints:
 """
 
 from typing import List
+import heapq
 
+from collections import Counter
 
 class Solution:
+
+    '''
+    A minHeap of size k.
+    Complexity:
+        * To construct heap, o(nums * logK)
+
+    返回顺序不一定按频率排列，但题目允许任意顺序。
+    - 统计频率：O(n)
+    - 维护堆：O(m log k)
+    - 堆空间：O(k)
+    '''
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
-        pass
+        heap = []
+        frequencies = Counter(nums)
+        for item, frequency in frequencies.items():
+            heapq.heappush(heap, (frequency, item))
+            if len(heap) > k:
+                heapq.heappop(heap)
+
+        return [h[1] for h in heap]
