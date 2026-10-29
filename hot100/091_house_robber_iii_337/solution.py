@@ -36,6 +36,9 @@ class TreeNode:
 
 
 class Solution:
+    '''
+    Version 1 is not efficient, because each node was processed by dfs functions multiple times
+
     def rob(self, root: Optional[TreeNode]) -> int:
         def dfs_with_root(root: TreeNode) -> int:
             if root is None:
@@ -48,3 +51,20 @@ class Solution:
             return max(dfs_no_root(root.left), dfs_with_root(root.left)) + max(dfs_no_root(root.right), dfs_with_root(root.right))
 
         return max(dfs_with_root(root), dfs_no_root(root))
+    '''
+
+    def rob(self, root: Optional[TreeNode]) -> int:
+
+        def dfs(root: TreeNode) -> int:
+            if root is None:
+                return 0, 0
+
+            left_with_root, left_no_root = dfs(root.left)
+            right_with_root, right_no_root = dfs(root.right)
+
+            max_with_root = left_no_root + right_no_root + root.val
+            max_no_root = max(left_with_root, left_no_root) + max(right_with_root, right_no_root)
+            return max_with_root, max_no_root
+
+        max_with_root, max_no_root = dfs(root)
+        return max(max_with_root, max_no_root)
