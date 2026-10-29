@@ -29,4 +29,19 @@ from typing import List
 
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        pass
+        cash_ready_to_buy = 0
+        cash_just_sold = float('-inf')
+        stock = -prices[0]
+
+        for i in range(1, len(prices), 1):
+            cash_ready_to_buy = max(
+                cash_ready_to_buy,
+                cash_just_sold,
+            )
+            cash_just_sold = stock + prices[i]
+            stock = max(
+                stock,
+                cash_ready_to_buy - prices[i]
+            )
+
+        return max(cash_ready_to_buy, cash_just_sold)
