@@ -53,8 +53,15 @@ class Solution:
         return max(dfs_with_root(root), dfs_no_root(root))
     '''
 
-    def rob(self, root: Optional[TreeNode]) -> int:
 
+    """
+    If I want to be more efficient, we can add cache for each dfs function if we intentionally call it
+    more than once.
+
+    @cache
+    def dfs()
+    """
+    def rob(self, root: Optional[TreeNode]) -> int:
         def dfs(root: TreeNode) -> int:
             if root is None:
                 return 0, 0
