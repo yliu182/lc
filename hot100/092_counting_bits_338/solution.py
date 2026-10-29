@@ -21,4 +21,14 @@ from typing import List
 
 class Solution:
     def countBits(self, n: int) -> List[int]:
-        pass
+        def get_bits(n: int) -> int:
+            cnt = 0
+            while n > 0:
+                cnt += (n & 1)
+                n = n >> 1
+            return cnt
+
+        ret = []
+        for i in range(n+1):
+            ret.append(get_bits(i))
+        return ret
