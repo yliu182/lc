@@ -29,5 +29,30 @@ Constraints:
 
 
 class Solution:
+    '''
+    关键点：
+    - 栈保存的是进入括号前的外层状态。
+    - 每个 [ 相当于进入一层递归。
+    - 每个 ] 相当于完成当前层并返回上一层。
+    - 必须正确处理多位数字。
+    时间复杂度与最终解码字符串长度相关，可记为 O(output length)；栈空间与最大嵌套深度相关。
+    '''
     def decodeString(self, s: str) -> str:
-        pass
+        prev_str = ""
+        cur_num = 0
+        cur_str = ""
+        stack = [] #  (prev_str, prev_num) of the last layer
+        for c in s:
+            if c == '[':
+                stack.append((cur_num, cur_str))
+                cur_str = ""
+                cur_num = 0
+            elif c == ']':
+                repeat, prev_str = stack.pop()
+                cur_str = prev_str + cur_str * repeat
+            elif c.isdigit():
+                cur_num = 10 * cur_num + int(c)
+            else:
+                cur_str = cur_str + c
+
+        return cur_str
