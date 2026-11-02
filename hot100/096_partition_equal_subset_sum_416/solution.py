@@ -49,20 +49,18 @@ class Solution:
     #     return dfs(0, 0)
 
     # 2D dp knapsack problem
+    '''
+    standard 0-1 problem:
+    dp[i][w] if only use the first i elements,  under the capacity constraint of w, what is the maximum value
+
+    dp[i][w] = max(dp[i-1][w], dp[i-1][w-weight[i-1]] + value[i-1]
+    this can be simplified to
+        dp[w] = max(dp[w], dp[w-weight] + value)
+
+    But for this problem, we need a differenty definition:
+    dp[i][target] whether we can achieve target using first i elements
+
     def canPartition(self, nums: List[int]) -> bool:
-        '''
-
-        standard 0-1 problem:
-        dp[i][w] if only use the first i elements,  under the capacity constraint of w, what is the maximum value
-
-        dp[i][w] = max(dp[i-1][w], dp[i-1][w-weight[i-1]] + value[i-1]
-        this can be simplified to
-            dp[w] = max(dp[w], dp[w-weight] + value)
-
-
-        But for this problem, we need a differenty definition:
-        dp[i][target] whether we can achieve target using first i elements
-        '''
         total = sum(nums)
         if total % 2 != 0:
             return False
@@ -81,9 +79,19 @@ class Solution:
                 else:
                     dp[i][j] = dp[i-1][j]
         return dp[len(nums)][target]
+    '''
 
+    def canPartition(self, nums: List[int]) -> bool:
+        total = sum(nums)
+        if total % 2 != 0:
+            return False
 
+        target = total // 2
+        dp = [False * (target + 1)]
+        dp[0] = True
+        for i in range(len(nums)):
+            for j in range(target, 0, -1):
+                if j >= nums[i-1]:
+                    dp[i] = dp[i] or dp[j - nums[i-1]]
 
-
-    # def canPartition(self, nums: List[int]) -> bool:
-    #     dp[]
+        return dp[target]
