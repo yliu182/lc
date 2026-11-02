@@ -33,5 +33,27 @@ class TreeNode:
 
 
 class Solution:
+
+    '''
+    双重 DFS 把问题拆成两层：
+    1. 外层 DFS：枚举每个节点作为路径起点。
+    2. 内层 DFS：统计从该节点出发、向下延伸的合法路径数量。
+    '''
     def pathSum(self, root: Optional[TreeNode], targetSum: int) -> int:
-        pass
+
+        def start_from(node, target):
+            if node is None:
+                return 0
+            ans = 1 if node.val == target else 0
+            ans += start_from(node.left, target-node.val)
+            ans += start_from(node.right, target-node.val)
+            return ans
+
+        def dfs(node: Optional[TreeNode]) -> int:
+            if node is None:
+                return 0
+
+            ans = dfs(node.left) + dfs(node.right) + start_from(node, targetSum)
+            return ans
+
+        return dfs(root)
