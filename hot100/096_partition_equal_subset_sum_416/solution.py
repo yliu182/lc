@@ -26,11 +26,22 @@ class Solution:
         total = sum(nums)
         if total % 2 != 0:
             return False
-        target = total / 2
-
+        target = total // 2
+        '''
+        因为不同的选择路径可能到达相同状态：
+        (index, cur_sum)
+        例如：
+        nums = [1, 1, 1]
+        状态 (index=2, cur_sum=1) 可以通过两种方式到达：
+        选择第一个 1，跳过第二个 1
+        跳过第一个 1，选择第二个 1
+        没有缓存时，该状态后面的所有分支会重复计算。添加缓存后，每个 (index, cur_sum) 只计算一次。
+        '''
+        @cache
         def dfs(index, cur_sum) -> bool:
             if cur_sum == target:
                 return True
+            elif cur_sum
             if index == len(nums):
                 return False
 
