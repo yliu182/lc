@@ -87,11 +87,11 @@ class Solution:
             return False
 
         target = total // 2
-        dp = [False * (target + 1)]
+        dp = [False ] * (target + 1)
         dp[0] = True
-        for i in range(len(nums)):
+        for i in range(1, len(nums)+1, 1):
             for j in range(target, 0, -1):
                 if j >= nums[i-1]:
-                    dp[i] = dp[i] or dp[j - nums[i-1]]
+                    dp[j] = dp[j] or dp[j - nums[i-1]]
 
         return dp[target]
