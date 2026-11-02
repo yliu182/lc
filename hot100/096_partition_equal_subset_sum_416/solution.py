@@ -23,4 +23,17 @@ from typing import List
 
 class Solution:
     def canPartition(self, nums: List[int]) -> bool:
-        pass
+        total = sum(nums)
+        if total % 2 != 0:
+            return False
+        target = total / 2
+
+        def dfs(index, cur_sum) -> bool:
+            if cur_sum == target:
+                return True
+            if index == len(nums):
+                return False
+
+            return dfs(index + 1, cur_sum + nums[index]) or dfs(index + 1, cur_sum)
+
+        return dfs(0, 0)
