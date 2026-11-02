@@ -61,6 +61,20 @@ class Solution:
                 if node == end:
                     return product
                 visited.add(node)
+                '''
+                这里的 visited 表示：
+                当前 query 中已经搜索过的节点。
+                而不是“当前递归路径上的节点”。
+                如果从某个节点出发没有找到目标，那么再次通过另一条路径到达这个节点，也不需要重新搜索，因为它能到达哪些后续节点不会改变。
+                例如：
+                a -> b -> d
+                \       /
+                -> c -
+                如果已经完整搜索过 d，之后从另一条路径再次到达 d，重复搜索没有意义。
+                因此这里不执行：
+                visited.remove(node)
+                可以保证每个节点在一次查询中最多访问一次，时间复杂度为 O(V+E)。
+                '''
 
                 ans = float('-inf')
                 for node_next, val in graph[node]:
